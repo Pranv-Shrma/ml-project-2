@@ -7,15 +7,18 @@ from Network_Security.exceptions.exception import NetworkSecurityException
 from Network_Security.utils.main_utils.utils import load_numpy_array_data, evaluate_models, load_object, save_object
 from Network_Security.utils.ml_utils.metric.classification_metric import get_classification_score
 from Network_Security.utils.ml_utils.models.estimator import NetworkModel
-import mlflow
 
 # ml models
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import (RandomForestClassifier, GradientBoostingClassifier, AdaBoostClassifier)
-
-
 from sklearn.metrics import f1_score, precision_score, recall_score
+
+# mlflow and dagshub
+
+import mlflow
+import dagshub
+dagshub.init(repo_owner='Pranv-Shrma', repo_name='ml-project-2', mlflow=True)
 
 
 
@@ -111,6 +114,10 @@ class ModelTrainer:
         
         Network_Model=NetworkModel(preprocessor=preprocessor,model=best_model)
         save_object(self.model_trainer_config.trained_model_file_path,obj=NetworkModel)
+        
+        # saving the best model in the final_models folder
+        save_object("final_models/model.pkl",best_model)
+        
         
         ## Model Trainer Artifact
         
